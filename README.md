@@ -2,4 +2,5 @@
 
 ## TODO List
 
-[] 
+[] Implement the calendar
+[]
