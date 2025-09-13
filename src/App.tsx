@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <h1>My Calendar</h1>
+      <h1 className='text-3xl font-bold underline'>My Calendar</h1>
     </>
   )
 }
