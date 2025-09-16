@@ -1,11 +1,6 @@
-import React, { useState } from "react";
-
+import React from "react";
 import "./App.css";
-import {
-  processMeetingsData,
-  formatFullDateTime,
-  createTimestampFromISO,
-} from "./utils/dateUtils";
+import { processMeetingsData, createTimestampFromISO } from "./utils/dateUtils";
 import ScheduleCard from "./components/ScheduleCard";
 
 const meetings = [
@@ -26,9 +21,45 @@ const meetings = [
 const processedMeetings = processMeetingsData(meetings);
 
 function App() {
+  const [viewMode, setViewMode] = React.useState<
+    "monthly" | "weekly" | "daily"
+  >("weekly");
+
+  const toggleViewMode = (newMode: "monthly" | "weekly" | "daily") => {
+    setViewMode(newMode);
+  };
+
+  const isActive = (mode: "monthly" | "weekly" | "daily") => viewMode === mode;
+
   return (
     <>
       <h1 className="text-3xl font-bold underline">My Calendar</h1>
+      <div className="flex space-x-4 mt-4">
+        <button
+          className={`px-4 py-2 rounded ${
+            isActive("monthly") ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => toggleViewMode("monthly")}
+        >
+          Monthly View
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${
+            isActive("weekly") ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => toggleViewMode("weekly")}
+        >
+          Weekly View
+        </button>
+        <button
+          className={`px-4 py-2 rounded ${
+            isActive("daily") ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => toggleViewMode("daily")}
+        >
+          Daily View
+        </button>
+      </div>
       <div className="meetings-container mt-8 grid grid-cols-7 gap-4">
         {processedMeetings.map((meeting) => (
           <ScheduleCard key={meeting.id} meeting={meeting} />
