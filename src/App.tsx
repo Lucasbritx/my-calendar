@@ -2,6 +2,9 @@ import React from "react";
 import "./App.css";
 import { processMeetingsData, createTimestampFromISO } from "./utils/dateUtils";
 import ScheduleCard from "./components/ScheduleCard";
+import DayCard from "./components/DayCard";
+
+// TODO: create an array of days
 
 const meetings = [
   {
@@ -64,6 +67,7 @@ function App() {
         {processedMeetings.map((meeting) => (
           <ScheduleCard key={meeting.id} meeting={meeting} />
         ))}
+        <DayCard schedules={processedMeetings} />
       </div>
     </>
   );
