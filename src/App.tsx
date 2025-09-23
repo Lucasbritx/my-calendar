@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { processMeetingsData, createTimestampFromISO } from "./utils/dateUtils";
 import ScheduleCard from "./components/ScheduleCard";
 import DayCard from "./components/DayCard";
-
-// TODO: create an array of days
+import { eachDayOfInterval, endOfMonth, endOfWeek, isSameDay, parseISO, startOfMonth, startOfWeek } from "date-fns";
 
 const meetings = [
   {
@@ -24,9 +23,28 @@ const meetings = [
 const processedMeetings = processMeetingsData(meetings);
 
 function App() {
-  const [viewMode, setViewMode] = React.useState<
-    "monthly" | "weekly" | "daily"
-  >("weekly");
+  const [viewMode, setViewMode] = useState<"monthly" | "weekly" | "daily">(
+    "weekly"
+  );
+  const today = new Date();
+
+  let days: Date[] = [];
+  if (viewMode === "monthly") {
+    days = eachDayOfInterval({
+      start: startOfMonth(today),
+      end: endOfMonth(today),
+    });
+  } else if (viewMode === "weekly") {
+    days = eachDayOfInterval({
+      start: startOfWeek(today, { weekStartsOn: 0 }),
+      end: endOfWeek(today, { weekStartsOn: 0 }),
+    });
+  } else {
+    days = [today]; // apenas o dia atual
+  }
+
+  const eventsOfDay = (day: Date) =>
+    meetings.filter((e) => isSameDay(parseISO(e.startTime), day));
 
   const toggleViewMode = (newMode: "monthly" | "weekly" | "daily") => {
     setViewMode(newMode);
