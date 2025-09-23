@@ -42,19 +42,3 @@ export const formatDateOnly = (timestamp: number): string => {
 export const formatTimeOnly = (timestamp: number): string => {
   return format(new Date(timestamp), 'h:mm a');
 };
-
-export const processMeetingsData = (meetings: Array<{
-  id: number;
-  title: string;
-  startTime: number;
-  endTime: number;
-}>) => {
-  return meetings.map(meeting => ({
-    ...meeting,
-    formattedDate: formatReadableDate(meeting.startTime),
-    formattedStartTime: formatTime(meeting.startTime),
-    formattedEndTime: formatTime(meeting.endTime),
-    formattedDateOnly: formatDateOnly(meeting.startTime),
-    formattedTimeOnly: formatTimeOnly(meeting.startTime),
-  }));
-};
