@@ -3,7 +3,4 @@ export type IMeeting = {
     title: string;
     startTime: number;
     endTime: number;
-    formattedDate: string;
-    formattedStartTime: string;
-    formattedEndTime: string;
 };
