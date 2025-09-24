@@ -8,7 +8,6 @@ import {
   endOfWeek,
   format,
   isSameDay,
-  parseISO,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
@@ -164,11 +163,11 @@ function App() {
       end: endOfWeek(today, { weekStartsOn: 0 }),
     });
   } else {
-    days = [today]; // apenas o dia atual
+    days = [today];
   }
 
   const eventsOfDay = (day: Date) =>
-    events.filter((e) => isSameDay(parseISO(String(e.startTime)), day));
+    events.filter((e) => isSameDay(new Date(e.startTime), day));
 
   const isActive = (mode: (typeof MODES)[keyof typeof MODES]) =>
     viewMode === mode;
