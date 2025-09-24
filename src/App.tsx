@@ -70,55 +70,40 @@ function App() {
     viewMode === mode;
 
   const viewContainerClass = clsx(
-          "gap-2",
-          viewMode === MODES.MONTHLY && "grid grid-cols-7",
-          viewMode === MODES.WEEKLY && "grid grid-cols-7",
-          viewMode === MODES.DAILY && "grid grid-cols-1"
-        );
+    "gap-2",
+    viewMode === MODES.MONTHLY && "grid grid-cols-7",
+    viewMode === MODES.WEEKLY && "grid grid-cols-7",
+    viewMode === MODES.DAILY && "grid grid-cols-1"
+  );
 
   return (
     <>
       <h1 className="text-3xl font-bold underline">My Calendar</h1>
       <div className="flex space-x-4 mt-4">
-        {Object.values(MODES).map((mode) => (
-          <button
-            key={mode}
-            className={`px-4 py-2 rounded ${
-              isActive(mode as typeof viewMode)
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => setViewMode(mode as typeof viewMode)}
-          >
-            {mode.charAt(0).toUpperCase() + mode.slice(1)} View
-          </button>
-        ))}
+        {Object.values(MODES).map((mode) => {
+          const buttonClassName = clsx(
+            "px-4 py-2 rounded",
+            isActive(mode) ? "bg-blue-500 text-white" : "bg-gray-200"
+          );
+
+          const buttonTitle = `${
+            mode.charAt(0).toUpperCase() + mode.slice(1)
+          } View`;
+
+          return (
+            <button
+              key={mode}
+              className={buttonClassName}
+              onClick={() => setViewMode(mode as typeof viewMode)}
+            >
+              {buttonTitle}
+            </button>
+          );
+        })}
       </div>
-      <div
-        className={viewContainerClass}
-      >
+      <div className={viewContainerClass}>
         {days.map((day) => (
-          <div
-            key={day.toISOString()}
-            className={clsx(
-              "border rounded-lg p-2 min-h-[100px] flex flex-col gap-1",
-              isSameDay(day, today) && "border-blue-500"
-            )}
-          >
-            <span className="text-sm font-semibold">
-              {format(day, "dd/MM")}
-            </span>
-            <ul className="space-y-1 text-xs">
-              {eventsOfDay(day).map((event) => (
-                <li
-                  key={event.id}
-                  className="px-2 py-1 rounded bg-blue-100 text-blue-700"
-                >
-                  {event.title}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <DayCard events={eventsOfDay(day)} day={day} />
         ))}
       </div>
     </>

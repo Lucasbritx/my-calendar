@@ -1,33 +1,35 @@
+import { clsx } from "clsx";
 import type { IMeeting } from "../../types/meeting";
-import { formatFullDateTime } from "../../utils/dateUtils";
+import { format, isSameDay } from "date-fns";
 
 type DayCardProps = {
-  schedules: IMeeting[]
+  day: Date;
+  events: IMeeting[];
 };
 
-const DayCard = ({ schedules }: DayCardProps) => (
-  <div className="day-card p-4 mb-4 border rounded">
-    <h2 className="text-2xl font-bold mb-4">Today's Schedule</h2>
-    {schedules.length === 0 ? (
-      <p className="text-gray-600">No meetings scheduled for today.</p>
-    ) : (
-      schedules.map(meeting => (
-        <div key={meeting.id} className="meeting-card p-4 mb-4 border rounded">
-          <h3 className="text-xl font-semibold">{meeting.title}</h3>
-          <p className="text-gray-600">{meeting.formattedDate}</p>
-          <p className="text-gray-600">
-            {meeting.formattedStartTime} - {meeting.formattedEndTime}
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Start: {formatFullDateTime(meeting.startTime)}
-          </p>
-          <p className="text-sm text-gray-500">
-            End: {formatFullDateTime(meeting.endTime)}
-          </p>
-        </div>
-      ))
-    )}
-  </div>
-);
+const DayCard = ({ day, events }: DayCardProps) => {
+  const today = new Date();
+
+  const containerClassName = clsx(
+    "border rounded-lg p-2 min-h-[100px] flex flex-col gap-1",
+    isSameDay(day, today) && "border-blue-500"
+  );
+
+  return (
+    <div className={containerClassName}>
+      <span className="text-sm font-semibold">{format(day, "dd/MM")}</span>
+      <ul className="space-y-1 text-xs">
+        {events.map((event) => (
+          <li
+            key={event.id}
+            className="px-2 py-1 rounded bg-blue-100 text-blue-700"
+          >
+            {event.title}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default DayCard;
