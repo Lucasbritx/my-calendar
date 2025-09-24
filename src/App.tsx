@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
 import { createTimestampFromISO } from "./utils/dateUtils";
-import ScheduleCard from "./components/ScheduleCard";
 import DayCard from "./components/DayCard";
 import {
   eachDayOfInterval,
@@ -39,6 +38,111 @@ const events = [
     title: "Lunch with Alice",
     startTime: createTimestampFromISO("2024-06-10T12:30:00"), // 12:30 PM
     endTime: createTimestampFromISO("2024-06-10T13:30:00"), // 1:30 PM
+  },
+  {
+    id: 3,
+    title: "Project Review",
+    startTime: createTimestampFromISO("2024-06-11T14:00:00"), // 2:00 PM
+    endTime: createTimestampFromISO("2024-06-11T15:00:00"), // 3:00 PM
+  },
+  {
+    id: 4,
+    title: "Dentist Appointment",
+    startTime: createTimestampFromISO("2024-06-15T09:00:00"), // 9:00 AM
+    endTime: createTimestampFromISO("2024-06-15T10:00:00"), // 10:00 AM
+  },
+  {
+    id: 5,
+    title: "Team Meeting",
+    startTime: createTimestampFromISO("2024-06-18T11:00:00"), // 11:00 AM
+    endTime: createTimestampFromISO("2024-06-18T12:00:00"), // 12:00 PM
+  },
+  // create two events for today
+  {
+    id: 6,
+    title: "Code Review",
+    startTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'09:00:00")
+    ), // today at 9:00 AM
+    endTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'10:00:00")
+    ), // today at 10:00 AM
+  },
+  {
+    id: 7,
+    title: "Client Call",
+    startTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'15:00:00")
+    ), // today at 3:00 PM
+    endTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'16:00:00")
+    ), // today at 4:00 PM
+  },
+  // create events for tomorrw
+  {
+    id: 8,
+    title: "Marketing Meeting",
+    startTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() + 1)),
+        "yyyy-MM-dd'T'10:00:00"
+      )
+    ), // tomorrow at 10:00 AM
+    endTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() + 1)),
+        "yyyy-MM-dd'T'11:00:00"
+      )
+    ), // tomorrow at 11:00 AM
+  },
+  {
+    id: 9,
+    title: "Product Launch",
+    startTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() + 1)),
+        "yyyy-MM-dd'T'14:00:00"
+      )
+    ), // tomorrow at 2:00 PM
+    endTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() + 1)),
+        "yyyy-MM-dd'T'15:00:00"
+      )
+    ), // tomorrow at 3:00 PM
+  },
+  // create events for two days ago
+  {
+    id: 10,
+    title: "Sprint Planning",
+    startTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() - 2)),
+        "yyyy-MM-dd'T'09:00:00"
+      )
+    ), // two days ago at 9:00 AM
+    endTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() - 2)),
+        "yyyy-MM-dd'T'10:00:00"
+      )
+    ), // two days ago at 10:00 AM
+  },
+  {
+    id: 11,
+    title: "One-on-One",
+    startTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() - 2)),
+        "yyyy-MM-dd'T'11:00:00"
+      )
+    ), // two days ago at 11:00 AM
+    endTime: createTimestampFromISO(
+      format(
+        new Date(new Date().setDate(new Date().getDate() - 2)),
+        "yyyy-MM-dd'T'11:30:00"
+      )
+    ), // two days ago at 11:30 AM
   },
 ];
 
