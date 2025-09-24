@@ -15,9 +15,11 @@ const DayCard = ({ day, events }: DayCardProps) => {
     isSameDay(day, today) && "border-blue-500"
   );
 
+  const dateTitle = isSameDay(day, today) ? "Today" : format(day, "EEEE, MMM d");
+
   return (
     <div className={containerClassName}>
-      <span className="text-sm font-semibold">{format(day, "dd/MM")}</span>
+      <span className="text-sm font-semibold">{dateTitle}</span>
       <ul className="space-y-1 text-xs">
         {events.map((event) => (
           <li
