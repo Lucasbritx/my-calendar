@@ -146,24 +146,24 @@ const events = [
 ];
 
 function App() {
+  const [selectedPeriod, setSelectedPeriod] = useState<Date>(new Date());
   const [viewMode, setViewMode] = useState<(typeof MODES)[keyof typeof MODES]>(
     MODES.WEEKLY
   );
-  const today = new Date();
 
   let days: Date[] = [];
   if (viewMode === MODES.MONTHLY) {
     days = eachDayOfInterval({
-      start: startOfMonth(today),
-      end: endOfMonth(today),
+      start: startOfMonth(selectedPeriod),
+      end: endOfMonth(selectedPeriod),
     });
   } else if (viewMode === MODES.WEEKLY) {
     days = eachDayOfInterval({
-      start: startOfWeek(today, { weekStartsOn: 0 }),
-      end: endOfWeek(today, { weekStartsOn: 0 }),
+      start: startOfWeek(selectedPeriod, { weekStartsOn: 0 }),
+      end: endOfWeek(selectedPeriod, { weekStartsOn: 0 }),
     });
   } else {
-    days = [today];
+    days = [selectedPeriod];
   }
 
   const eventsOfDay = (day: Date) =>
@@ -178,6 +178,59 @@ function App() {
     viewMode === MODES.WEEKLY && "grid grid-cols-7",
     viewMode === MODES.DAILY && "grid grid-cols-1"
   );
+
+  const changeViewMode = (mode: (typeof MODES)[keyof typeof MODES]) => {
+    setViewMode(mode);
+    setSelectedPeriod(new Date());
+  };
+
+  const setPreviousPeriod = () => {
+    if (viewMode === MODES.MONTHLY) {
+      setSelectedPeriod(
+        new Date(selectedPeriod.getFullYear(), selectedPeriod.getMonth() - 1, 1)
+      );
+    } else if (viewMode === MODES.WEEKLY) {
+      setSelectedPeriod(
+        new Date(
+          selectedPeriod.getFullYear(),
+          selectedPeriod.getMonth(),
+          selectedPeriod.getDate() - 7
+        )
+      );
+    } else {
+      setSelectedPeriod(
+        new Date(
+          selectedPeriod.getFullYear(),
+          selectedPeriod.getMonth(),
+          selectedPeriod.getDate() - 1
+        )
+      );
+    }
+  };
+
+  const setNextPeriod = () => {
+    if (viewMode === MODES.MONTHLY) {
+      setSelectedPeriod(
+        new Date(selectedPeriod.getFullYear(), selectedPeriod.getMonth() + 1, 1)
+      );
+    } else if (viewMode === MODES.WEEKLY) {
+      setSelectedPeriod(
+        new Date(
+          selectedPeriod.getFullYear(),
+          selectedPeriod.getMonth(),
+          selectedPeriod.getDate() + 7
+        )
+      );
+    } else {
+      setSelectedPeriod(
+        new Date(
+          selectedPeriod.getFullYear(),
+          selectedPeriod.getMonth(),
+          selectedPeriod.getDate() + 1
+        )
+      );
+    }
+  };
 
   return (
     <>
@@ -197,13 +250,29 @@ function App() {
             <button
               key={mode}
               className={buttonClassName}
-              onClick={() => setViewMode(mode as typeof viewMode)}
+              onClick={() => changeViewMode(mode)}
             >
               {buttonTitle}
             </button>
           );
         })}
       </div>
+
+      <div className="mt-4">
+        <button
+          className="px-4 py-2 bg-gray-200 rounded mr-2"
+          onClick={() => setPreviousPeriod()}
+        >
+          Previous
+        </button>
+        <button
+          className="px-4 py-2 bg-gray-200 rounded"
+          onClick={() => setNextPeriod()}
+        >
+          Next
+        </button>
+      </div>
+
       <div className={viewContainerClass}>
         {days.map((day) => (
           <DayCard events={eventsOfDay(day)} day={day} />
