@@ -9,6 +9,7 @@ import {
   format,
   isSameDay,
   isSameMonth,
+  isSameWeek,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
@@ -144,8 +145,8 @@ function App() {
   let days: Date[] = [];
   const startMonth = startOfMonth(selectedPeriod);
   const endMonth = endOfMonth(selectedPeriod);
-  const startWeekMonth = startOfWeek(startMonth, { weekStartsOn: 1 });
-  const endWeekMonth = endOfWeek(endMonth, { weekStartsOn: 1 });  
+  const startWeekMonth = startOfWeek(startMonth, { weekStartsOn: 0 });
+  const endWeekMonth = endOfWeek(endMonth, { weekStartsOn: 0 });
 
   if (viewMode === MODES.MONTHLY) {
     days = eachDayOfInterval({
@@ -154,8 +155,8 @@ function App() {
     });
   } else if (viewMode === MODES.WEEKLY) {
     days = eachDayOfInterval({
-      start: startOfWeek(selectedPeriod, { weekStartsOn: 1 }),
-      end: endOfWeek(selectedPeriod, { weekStartsOn: 1 }),
+      start: startOfWeek(selectedPeriod, { weekStartsOn: 0 }),
+      end: endOfWeek(selectedPeriod, { weekStartsOn: 0 }),
     });
   } else {
     days = [selectedPeriod];
@@ -270,7 +271,12 @@ function App() {
 
       <div className={viewContainerClass}>
         {days.map((day) => (
-          <DayCard events={eventsOfDay(day)} day={day} />
+          <DayCard
+            events={eventsOfDay(day)}
+            day={day}
+            selectedPeriod={selectedPeriod}
+            viewMode={viewMode}
+          />
         ))}
       </div>
     </>
