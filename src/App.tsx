@@ -8,22 +8,12 @@ import {
   endOfWeek,
   format,
   isSameDay,
+  isSameMonth,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
 import clsx from "clsx";
-
-const IModes = {
-  MONTHLY: "monthly",
-  WEEKLY: "weekly",
-  DAILY: "daily",
-} as const;
-
-const MODES: typeof IModes = {
-  MONTHLY: "monthly",
-  WEEKLY: "weekly",
-  DAILY: "daily",
-};
+import { MODES } from "./constants/modes";
 
 const events = [
   {
@@ -152,15 +142,20 @@ function App() {
   );
 
   let days: Date[] = [];
+  const startMonth = startOfMonth(selectedPeriod);
+  const endMonth = endOfMonth(selectedPeriod);
+  const startWeekMonth = startOfWeek(startMonth, { weekStartsOn: 1 });
+  const endWeekMonth = endOfWeek(endMonth, { weekStartsOn: 1 });  
+
   if (viewMode === MODES.MONTHLY) {
     days = eachDayOfInterval({
-      start: startOfMonth(selectedPeriod),
-      end: endOfMonth(selectedPeriod),
+      start: startWeekMonth,
+      end: endWeekMonth,
     });
   } else if (viewMode === MODES.WEEKLY) {
     days = eachDayOfInterval({
-      start: startOfWeek(selectedPeriod, { weekStartsOn: 0 }),
-      end: endOfWeek(selectedPeriod, { weekStartsOn: 0 }),
+      start: startOfWeek(selectedPeriod, { weekStartsOn: 1 }),
+      end: endOfWeek(selectedPeriod, { weekStartsOn: 1 }),
     });
   } else {
     days = [selectedPeriod];
