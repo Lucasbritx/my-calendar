@@ -8,8 +8,6 @@ import {
   endOfWeek,
   format,
   isSameDay,
-  isSameMonth,
-  isSameWeek,
   startOfMonth,
   startOfWeek,
 } from "date-fns";
@@ -48,6 +46,16 @@ const events = [
     endTime: createTimestampFromISO("2024-06-18T12:00:00"), // 12:00 PM
   },
   // create two events for today
+   {
+    id: 60,
+    title: "Conflicting meeting",
+    startTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'09:15:00")
+    ), // today at 9:00 AM
+    endTime: createTimestampFromISO(
+      format(new Date(), "yyyy-MM-dd'T'10:30:00")
+    ), // today at 10:00 AM
+  },
   {
     id: 6,
     title: "Code Review",
