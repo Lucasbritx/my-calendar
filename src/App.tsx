@@ -89,7 +89,7 @@ const events = [
     endTime: createTimestampFromISO(
       format(
         new Date(new Date().setDate(new Date().getDate() + 1)),
-        "yyyy-MM-dd'T'11:00:00"
+        "yyyy-MM-dd'T'23:00:00"
       )
     ), // tomorrow at 11:00 AM
   },
