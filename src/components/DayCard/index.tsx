@@ -157,6 +157,7 @@ const DayCard = ({ day, events, selectedPeriod, viewMode }: DayCardProps) => {
               gridRow: `${event.gridRowStart} / ${event.gridRowEnd}`,
               gridColumn: event.column + 1,
             }}
+            draggable={true}
           >
             <div className="font-medium">{event.title}</div>
             <div className="text-xs text-blue-600">
