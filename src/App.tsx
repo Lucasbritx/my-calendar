@@ -14,7 +14,7 @@ import {
 import clsx from "clsx";
 import { MODES } from "./constants/modes";
 
-let events = [
+let initialEvents = [
   {
     id: 1,
     title: "Meeting with Bob",
@@ -149,6 +149,7 @@ function App() {
   const [viewMode, setViewMode] = useState<(typeof MODES)[keyof typeof MODES]>(
     MODES.WEEKLY
   );
+  const [events, setEvents] = useState(initialEvents);
 
   let days: Date[] = [];
   const startMonth = startOfMonth(selectedPeriod);
@@ -236,8 +237,20 @@ function App() {
     }
   };
 
-  const changeEventTime = (eventId: string, newStartTime: String) => {
+  const changeEventTime = (eventId: string, newStartTime: Date) => {
+    const newEvents = events.map((event) => {
+      if (event.id === Number(eventId)) {
+        const eventDuration = event.endTime - event.startTime;
+        return {
+          ...event,
+          startTime: newStartTime.getTime(),
+          endTime: newStartTime.getTime() + eventDuration,
+        };
+      }
+      return event;
+    });
 
+    setEvents(newEvents);
   };
 
   return (

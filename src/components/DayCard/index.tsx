@@ -9,7 +9,7 @@ type DayCardProps = {
   events: IMeeting[];
   selectedPeriod: Date;
   viewMode: (typeof MODES)[keyof typeof MODES];
-  changeEventTime: (eventId: string, newStartTime: String) => void;
+  changeEventTime: (eventId: string, newStartTime: Date) => void;
 };
 
 const hours = [
@@ -39,7 +39,13 @@ const hours = [
   "23:00",
 ];
 
-const DayCard = ({ day, events, selectedPeriod, viewMode, changeEventTime }: DayCardProps) => {
+const DayCard = ({
+  day,
+  events,
+  selectedPeriod,
+  viewMode,
+  changeEventTime,
+}: DayCardProps) => {
   const today = new Date();
 
   const containerClassName = clsx(
@@ -133,8 +139,18 @@ const DayCard = ({ day, events, selectedPeriod, viewMode, changeEventTime }: Day
   const onDrop = (e: React.DragEvent, startTime: string) => {
     e.preventDefault();
     const draggedEventId = e.dataTransfer.getData("text/plain");
-    console.log("Dropped event ID:", draggedEventId, "on slot:", startTime);
-    changeEventTime(draggedEventId, startTime);
+    const [hours, minutes] = startTime.split(":").map(Number);
+
+    const newDateTime = new Date(day);
+    newDateTime.setHours(hours, minutes, 0, 0);
+
+    console.log(
+      "Dropped event ID:",
+      draggedEventId,
+      "on slot:",
+      newDateTime.toISOString()
+    );
+    changeEventTime(draggedEventId, newDateTime);
   };
 
   return (
@@ -165,7 +181,7 @@ const DayCard = ({ day, events, selectedPeriod, viewMode, changeEventTime }: Day
                 gridColumn: colIndex + 2,
               }}
               onDragOver={onDragOver}
-              onDrop={(e) => onDrop(e, hour )}
+              onDrop={(e) => onDrop(e, hour)}
             />
           ))
         )}
