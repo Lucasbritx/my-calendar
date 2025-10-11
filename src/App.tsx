@@ -14,7 +14,7 @@ import {
 import clsx from "clsx";
 import { MODES } from "./constants/modes";
 
-const events = [
+let initialEvents = [
   {
     id: 1,
     title: "Meeting with Bob",
@@ -46,7 +46,7 @@ const events = [
     endTime: createTimestampFromISO("2024-06-18T12:00:00"), // 12:00 PM
   },
   // create two events for today
-   {
+  {
     id: 60,
     title: "Conflicting meeting",
     startTime: createTimestampFromISO(
@@ -149,6 +149,7 @@ function App() {
   const [viewMode, setViewMode] = useState<(typeof MODES)[keyof typeof MODES]>(
     MODES.WEEKLY
   );
+  const [events, setEvents] = useState(initialEvents);
 
   let days: Date[] = [];
   const startMonth = startOfMonth(selectedPeriod);
@@ -236,6 +237,22 @@ function App() {
     }
   };
 
+  const changeEventTime = (eventId: string, newStartTime: Date) => {
+    const newEvents = events.map((event) => {
+      if (event.id === Number(eventId)) {
+        const eventDuration = event.endTime - event.startTime;
+        return {
+          ...event,
+          startTime: newStartTime.getTime(),
+          endTime: newStartTime.getTime() + eventDuration,
+        };
+      }
+      return event;
+    });
+
+    setEvents(newEvents);
+  };
+
   return (
     <>
       <h1 className="text-3xl font-bold underline">My Calendar</h1>
@@ -284,6 +301,7 @@ function App() {
             day={day}
             selectedPeriod={selectedPeriod}
             viewMode={viewMode}
+            changeEventTime={changeEventTime}
           />
         ))}
       </div>

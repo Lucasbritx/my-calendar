@@ -9,6 +9,7 @@ type DayCardProps = {
   events: IMeeting[];
   selectedPeriod: Date;
   viewMode: (typeof MODES)[keyof typeof MODES];
+  changeEventTime: (eventId: string, newStartTime: Date) => void;
 };
 
 const hours = [
@@ -38,7 +39,13 @@ const hours = [
   "23:00",
 ];
 
-const DayCard = ({ day, events, selectedPeriod, viewMode }: DayCardProps) => {
+const DayCard = ({
+  day,
+  events,
+  selectedPeriod,
+  viewMode,
+  changeEventTime,
+}: DayCardProps) => {
   const today = new Date();
 
   const containerClassName = clsx(
@@ -120,6 +127,32 @@ const DayCard = ({ day, events, selectedPeriod, viewMode }: DayCardProps) => {
   );
   const gridCols = `auto repeat(${maxColumns}, 1fr)`;
 
+  const onDragStart = (e: React.DragEvent, eventId: number) => {
+    console.log("Drag started for event ID:", eventId);
+    e.dataTransfer.setData("text/plain", eventId.toString());
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const onDrop = (e: React.DragEvent, startTime: string) => {
+    e.preventDefault();
+    const draggedEventId = e.dataTransfer.getData("text/plain");
+    const [hours, minutes] = startTime.split(":").map(Number);
+
+    const newDateTime = new Date(day);
+    newDateTime.setHours(hours, minutes, 0, 0);
+
+    console.log(
+      "Dropped event ID:",
+      draggedEventId,
+      "on slot:",
+      newDateTime.toISOString()
+    );
+    changeEventTime(draggedEventId, newDateTime);
+  };
+
   return (
     <div className={containerClassName}>
       <span className="text-sm font-semibold h-10">{dateTitle}</span>
@@ -140,12 +173,15 @@ const DayCard = ({ day, events, selectedPeriod, viewMode }: DayCardProps) => {
         {hours.map((hour, index) =>
           Array.from({ length: maxColumns }, (_, colIndex) => (
             <div
+              id={`slot-${hour}-${colIndex}`}
               key={`slot-${hour}-${colIndex}`}
               className="border-b border-r border-gray-200 min-h-[30px]"
               style={{
                 gridRow: index + 1,
                 gridColumn: colIndex + 2,
               }}
+              onDragOver={onDragOver}
+              onDrop={(e) => onDrop(e, hour)}
             />
           ))
         )}
@@ -157,6 +193,7 @@ const DayCard = ({ day, events, selectedPeriod, viewMode }: DayCardProps) => {
               gridRow: `${event.gridRowStart} / ${event.gridRowEnd}`,
               gridColumn: event.column + 1,
             }}
+            onDragStart={(e) => onDragStart(e, event.id)}
             draggable={true}
           >
             <div className="font-medium">{event.title}</div>
