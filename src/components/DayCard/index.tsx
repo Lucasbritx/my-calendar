@@ -180,11 +180,10 @@ const DayCard = ({
             <div
               id={`slot-${hour}-${colIndex}`}
               key={`slot-${hour}-${colIndex}`}
-              className="border-b border-r border-gray-200 min-h-[30px]"
-              style={{
-                gridRow: index + 1,
-                gridColumn: colIndex + 2,
-              }}
+              className={clsx("border-b border-r border-gray-200 min-h-[30px]",
+                `row-start-[${index + 1}]`,
+                `col-start-[${colIndex + 2}]`
+              )}
               onDragOver={onDragOver}
               onDrop={(e) => onDrop(e, hour)}
             />
