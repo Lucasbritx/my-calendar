@@ -192,7 +192,7 @@ const DayCard = ({
         )}
         {eventPositions.map((event) => {
           const eventClassName = clsx(
-            "bg-blue-100 text-blue-700 border-l-4 border-blue-400 px-2 py-1 mx-1 rounded text-xs z-10 overflow-hidden whitespace-nowrap text-ellipsis",
+            "bg-blue-100 text-blue-700 border-l-4 border-blue-400 px-2 py-1 mx-1 rounded text-xs z-10 truncate",
             viewMode === MODES.WEEKLY && "h-14"
           );
           return (
