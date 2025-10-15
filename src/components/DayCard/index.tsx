@@ -153,6 +153,11 @@ const DayCard = ({
     changeEventTime(draggedEventId, newDateTime);
   };
 
+  const hoursContainerClassname = clsx(
+    "text-sm py-1 pr-2 border-b border-gray-200",
+    viewMode === MODES.WEEKLY && "min-h-14"
+  );
+
   return (
     <div className={containerClassName}>
       <span className="text-sm font-semibold h-10">{dateTitle}</span>
@@ -163,7 +168,7 @@ const DayCard = ({
         {hours.map((hour, index) => (
           <div
             key={`hour-${hour}`}
-            className="text-sm py-1 pr-2 border-b border-gray-200"
+            className={hoursContainerClassname}
             style={{ gridRow: index + 1, gridColumn: 1 }}
           >
             {hour}
@@ -185,24 +190,31 @@ const DayCard = ({
             />
           ))
         )}
-        {eventPositions.map((event) => (
-          <div
-            key={event.id}
-            className="bg-blue-100 text-blue-700 border-l-4 border-blue-400 px-2 py-1 mx-1 rounded text-xs z-10"
-            style={{
-              gridRow: `${event.gridRowStart} / ${event.gridRowEnd}`,
-              gridColumn: event.column + 1,
-            }}
-            onDragStart={(e) => onDragStart(e, event.id)}
-            draggable={true}
-          >
-            <div className="font-medium">{event.title}</div>
-            <div className="text-xs text-blue-600">
-              {formatTimeOnly(event.startTime)} -{" "}
-              {formatTimeOnly(event.endTime)}
+        {eventPositions.map((event) => {
+          const eventClassName = clsx(
+            "bg-blue-100 text-blue-700 border-l-4 border-blue-400 px-2 py-1 mx-1 rounded text-xs z-10 overflow-hidden whitespace-nowrap text-ellipsis",
+            viewMode === MODES.WEEKLY && "h-14"
+          );
+          return (
+            <div
+              key={event.id}
+              className={eventClassName}
+              style={{
+                gridRow: `${event.gridRowStart} / ${event.gridRowEnd}`,
+                gridColumn: event.column + 1,
+              }}
+              onDragStart={(e) => onDragStart(e, event.id)}
+              draggable={true}
+              title={event.title}
+            >
+              <div className="font-medium">{event.title}</div>
+              <div className="text-xs text-blue-600">
+                {formatTimeOnly(event.startTime)} -{" "}
+                {formatTimeOnly(event.endTime)}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
