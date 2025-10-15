@@ -153,11 +153,6 @@ const DayCard = ({
     changeEventTime(draggedEventId, newDateTime);
   };
 
-  const hoursContainerClassname = clsx(
-    "text-sm py-1 pr-2 border-b border-gray-200",
-    viewMode === MODES.WEEKLY && "min-h-14"
-  );
-
   return (
     <div className={containerClassName}>
       <span className="text-sm font-semibold h-10">{dateTitle}</span>
@@ -168,8 +163,11 @@ const DayCard = ({
         {hours.map((hour, index) => (
           <div
             key={`hour-${hour}`}
-            className={hoursContainerClassname}
-            style={{ gridRow: index + 1, gridColumn: 1 }}
+            className={clsx(
+              "text-sm py-1 pr-2 border-b border-gray-200 column-1",
+              viewMode === MODES.WEEKLY && "min-h-14",
+              `row-${index}`
+            )}
           >
             {hour}
           </div>
@@ -180,7 +178,8 @@ const DayCard = ({
             <div
               id={`slot-${hour}-${colIndex}`}
               key={`slot-${hour}-${colIndex}`}
-              className={clsx("border-b border-r border-gray-200 min-h-[30px]",
+              className={clsx(
+                "border-b border-r border-gray-200 min-h-[30px]",
                 `row-start-[${index + 1}]`,
                 `col-start-[${colIndex + 2}]`
               )}
